@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Fast_API_goal_tracker",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
