@@ -53,11 +53,11 @@ async def update_note(goal_id: str, note_update: pydantic_models.Note,current_us
 
 
 @router.delete("/delete/{goal_id}/note/{note_id}")
-async def delete_milestone(goal_id: str, note_id: str,current_user: db_models.User = Depends(auth.get_current_user)):
+async def delete_note(goal_id: str, note_id: str,current_user: db_models.User = Depends(auth.get_current_user)):
     goal = db_models.Goal.objects(id=goal_id,user_id=str(current_user.id)).first()
     if not ( goal and note_id ):
         raise HTTPException(status_code=404, detail="Goal or milestone not found.")
-    goal.milestones = [r for r in goal.notes if str(r.id) != note_id]
+    goal.notes = [r for r in goal.notes if str(r.id) != note_id]
     goal.save()
     return {"detail": "Note deleted successfully."}
 
