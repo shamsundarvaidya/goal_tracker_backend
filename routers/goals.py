@@ -9,8 +9,6 @@ from typing import List
 
 router = APIRouter()
 
-
-    
 @router.post("/add-goal/", response_model=pydantic_models.Goal)
 async def create_goal(goal: pydantic_models.Goal,current_user: db_models.User = Depends(auth.get_current_user)):
     try:
@@ -91,7 +89,22 @@ async def delete_goal(goal_id: str, current_user: db_models.User = Depends(auth.
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@router.put("/update",response_model=pydantic_models.Goal)
+async def update_goal(req_goal:pydantic_models.UpdateGoal, current_user: db_models.User = Depends(auth.get_current_user)):
+    try:
+        goal = db_models.Goal.objects(id=req_goal.goal_id, user_id=str(current_user.id)).first()
+        if not goal:
+            raise HTTPException(status_code=404, detail="No goals found for this user.")
 
+        updated_goal = req_goal.model_dump(exclude_unset=True, exclude={"goal_id"})
+        print(updated_goal)
+        for field, value in updated_goal.items():
+            setattr(goal, field, value)
+        goal.save()
+        return goal
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 

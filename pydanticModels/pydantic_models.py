@@ -72,18 +72,13 @@ class Goal(BaseModel):
 
 
 class UpdateGoal(BaseModel):
-    goal_id: str = Field(alias="_id", default=None)
-    title: Optional[str] = ""
-    description: Optional[str] = ""
+    goal_id: str = Field(alias="_id",)
+    title: str
+    description: str
     category: Optional[str] = ""
     start_date: Optional[datetime] = ""
     end_date: Optional[datetime] = ""
     status: Optional[str] = ""
     progress: Optional[int] = Field(default=0)
-    milestones: Optional[List[Milestone]] = Field(default_factory=list)
-    reminders: Optional[List[Reminder]] = Field(default_factory=list)
-    notes: Optional[List[Note]] = Field(default_factory=list)
     tags: Optional[List[str]] = Field(default_factory=list)
-
-
     model_config = ConfigDict(from_attributes=True)
